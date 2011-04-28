@@ -20,6 +20,9 @@ other options (not currently used)
 \details{
 This function echos the output of the RuleQuest C code, including the rules, the resulting linear models as well as the variable usage summaries.
 
+The Cubist output contains variable usage statistics. It gives the percentage of times where each variable was used in a condition and/or a linear model. Note that this output will probably be inconsistent with the rules shown above. At each split of the tree, Cubist saves a linear model (after feature selection) that is allowed to have terms for each variable used in the current split or any split above it. Quinlan (1992) discusses a smoothing algorithm where each model prediction is a linear combination of the parent and child model along the tree. As such, the final prediction is a function of all the linear models from the initial node to the terminal node. The percentages shown in the Cubist output reflects all the models involved in prediction (as opposed to the terminal models shown in the output).
+
+
 }
 \value{
 an object of class \code{summary.cubist} with elements

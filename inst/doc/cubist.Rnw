@@ -105,6 +105,8 @@ An example of a model tree can be illustrated using the Boston Housing data in t
 library(Cubist)
 library(mlbench)
 data(BostonHousing)
+BostonHousing$chas <- as.numeric(BostonHousing$chas) - 1
+
 set.seed(1)
 
 inTrain <- sample(1:nrow(BostonHousing), floor(.8*nrow(BostonHousing)))
@@ -134,7 +136,7 @@ cor(mtPred, testOutcome)^2
 
 \section{Boosting}
 
-The Cubist model can also use a boosting--like scheme called {\em committees} where iterative model trees are created in sequence. The first tree follows the procedure described in the last section. Subsequent trees using a weighting scheme similar to gradient boosting where case weights are applied based on the errors from previous model trees. Unlike traditional boosting, stage weights for each committee are not used to average the predictions from each model tree; the final prediction is a simple average of the predictions from each model tree.
+The Cubist model can also use a boosting--like scheme called {\em committees} where iterative model trees are created in sequence. The first tree follows the procedure described in the last section. Subsequent trees are created using adjusted versions to the training set outcome: if the model over--predicted a value, the response is adjusted downward for the next model (and so on). Unlike traditional boosting, stage weights for each committee are not used to average the predictions from each model tree; the final prediction is a simple average of the predictions from each model tree.
 
 The \code{committee} option can be used to control number of model trees:
 
@@ -173,7 +175,96 @@ Note that the previous models used the implicit default of \code{neighbors = 0} 
 To tune the model over different values of \code{neighbors} and
 \code{committees}, the \code{train} function in the
 \href{http://cran.r-project.org/web/packages/caret/index.html}{caret}
-package can be used to optimize these parameters. 
+package can be used to optimize these parameters. For example:
+
+<<tune>>=
+library(caret)
+
+set.seed(1)
+cTune <- train(x = trainingPredictors, y = trainingOutcome,
+               "cubist",
+               tuneGrid = expand.grid(.committees = c(1, 10, 50, 100), 
+                                      .neighbors = c(0, 1, 5, 9)),
+               trControl = trainControl(method = "cv"))
+cTune
+@ 
+
+Figure \ref{tune} shows the profiles of the tuning parameters produced
+using \code{plot(cTune)}.
+
+
+\setkeys{Gin}{width=\textwidth}
+\begin{figure}[ht!]
+  \begin{center}	
+<<tune, echo = FALSE, fig = TRUE, width = 8, height = 4.5>>=
+trellis.par.set(caretTheme())
+print(plot(cTune, aut.key = list(columns = 4)))
+@ 
+    \caption{The relationship between performance and the two tuning
+      parameters, as estimated using cross--validation.}
+    \label{tune}
+  \end{center}
+\end{figure}
+
+
+It may also be useful to see how different models fit a single predictor:
+<<lstat>>=
+lstat <- trainingPredictors[, "lstat", drop = FALSE]
+justRules <- cubist(lstat, trainingOutcome)
+andCommittees <- cubist(lstat, trainingOutcome, committees = 100)
+@ 
+
+Figure \ref{lstat} shows the model fits for the test data. For these
+data, there doesn't appear to be much of a improvement when committees
+or instances are added to the based rules.
+
+\setkeys{Gin}{width=\textwidth}
+\begin{figure}[ht!]
+  \begin{center}	
+<<lstatPlot, echo = FALSE, fig = TRUE, width = 8, height = 4.5>>=
+lstatTest <- testPredictors[, "lstat", drop = FALSE]
+newOrder <- order(lstatTest$lstat)
+lstatTest <- lstatTest[newOrder,,drop = FALSE]
+testOutcome <- testOutcome[newOrder]
+plot(lstatTest$lstat, testOutcome,
+     xlab = "lstat", ylab = "Median Home Value")
+points(lstatTest$lstat, predict(justRules, lstatTest),
+       type = "l", lwd = 2, col = "black")
+points(lstatTest$lstat, predict(justRules, lstatTest, neighbors = 5),
+       type = "l", lwd = 2, col = "blue")
+points(lstatTest$lstat, predict(andCommittees, lstatTest),
+       type = "l", lwd = 2, col = "darkred")
+legend(20, 50,
+       c("Rules", "100 Committees", "Rules + 5 Neighbors"),
+       col = c("black", "darkred", "blue"),
+       lwd = rep(2, 3))
+@ 
+    \caption{Different Cubist models for a single predictor.}
+    \label{lstat}
+  \end{center}
+\end{figure}
+
+\section{Variable Importance}
+
+The \code{modelTree} method for Cubist shows the usage of each variable in either the rule conditions or the (terminal) linear model. In actuality, many more linear models are used in prediction that are shown in the output.  Because of this,  the variable usage statistics shown at the end of the output of the \code{summary} function will probably be inconsistent with the rules also shown in the output. At each split of the tree, Cubist saves a linear model (after feature selection) that is allowed to have terms for each variable used in the current split or any split above it. Quinlan (1992) discusses a smoothing algorithm where each model prediction is a linear combination of the parent and child model along the tree. As such, the final prediction is a function of all the linear models from the initial node to the terminal node. The percentages shown in the Cubist output reflects all the models involved in prediction (as opposed to the terminal models shown in the output).
+
+The raw usage statistics are contained in a data frame called
+\code{usage} in the \code{cubist} object. 
+
+The \pkg{caret} package has a general variable importance method
+\code{varImp}. When using this function on a \code{cubist} argument,
+the variable importance is a linear combination of the usage in the rule conditions and the model. 
+
+
+For example:
+<<vimp>>=
+summary(modelTree)
+modelTree$usage
+library(caret)
+varImp(modelTree)
+@ 
+
+It should be noted that this variable importance measure does not capture the influence of the predictors when using the instance--based correction.
 
 
 \section{Exporting the Model}

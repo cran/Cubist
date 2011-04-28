@@ -42,6 +42,8 @@ cubist.default <- function(x, y,
 
    if(committees < 1 | committees > 100)
     stop("number of committees must be between 1 and 100")
+
+  if(!is.data.frame(x) & !is.matrix(x)) stop("x must be a matrix or data frame")
   
   namesString <- makeNamesFile(x, y, label = control$label, comments = TRUE)
   dataString <- makeDataFile(x, y)
@@ -79,6 +81,23 @@ cubist.default <- function(x, y,
   maxd <- tmp[grep("maxd", tmp) + 1]
   Z$model <- gsub(paste("insts=\"1\" nn=\"1\" ", "maxd=\"", maxd, "\"", sep = ""), "insts=\"0\"", Z$model)
   maxd <- as.double(maxd)
+
+
+  usage <- varUsage(Z$output)
+  if(nrow(usage) < ncol(x))
+    {
+      xNames <- colnames(x)
+      uNames <- as.character(usage$Variable)
+      if(!all(xNames %in% uNames))
+        {
+
+          usage2 <- data.frame(Conditions = 0,
+                               Model = 0,
+                               Variable = xNames[!(xNames %in% uNames)])
+          usage <- rbind(usage, usage2)
+        }
+
+    }
   
 ## todo get mean and std of numeric data for scaling later for plots
 
@@ -92,11 +111,12 @@ cubist.default <- function(x, y,
               maxd = maxd,
               dims = dim(x),
               splits = splits,
+              usage = usage,
               call = funcCall)  
   coefs <- coef.cubist(out, varNames = colnames(x))
   out$coefficients <- coefs
 
-  tmp <- apply(coefs[, -(1:3)],2, function(x) any(!is.na(x)))
+  tmp <- apply(coefs[, -(1:3),drop = FALSE],2, function(x) any(!is.na(x)))
   tmp <- names(tmp)[tmp]
   xInfo <- list(all = colnames(x),
                 used = union(as.character(splits$variable), tmp))

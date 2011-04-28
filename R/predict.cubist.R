@@ -5,7 +5,7 @@ predict.cubist <- function (object, newdata = NULL, neighbors = 0, ...)
   if(is.null(newdata)) stop("newdata must be non-null")
   
   ## check order of data to make sure that it is the same
-  newdata <- newdata[, object$vars$all]
+  newdata <- newdata[, object$vars$all,drop = FALSE]
 
 
   if(length(neighbors) > 1) stop("only a single value of neighbors is allowed")

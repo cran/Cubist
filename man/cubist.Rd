@@ -58,6 +58,7 @@ an object of class \code{cubist} with elements:
   \item{coefs}{a data frame of regression coefficients for each rule within each committee}
   \item{vars}{a list with elements \code{all} and \code{used} listing the predictors passed into the function and used by any rule or model}
   \item{fitted.values}{a numeric vector of predictions on the training set.}
+  \item{usage}{a data frame with the percent of models where each variable was used. See  \code{\link{summary.cubist}} for a discussion.}
 }
 \references{
 Quinlan. Learning with continuous classes. Proceedings of the 5th Australian Joint Conference On Artificial Intelligence (1992) pp. 343-348
