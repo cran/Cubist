@@ -36,7 +36,6 @@
 #include "extern.h"
 
 #include <sys/time.h>
-#include <sys/resource.h>
 
 #include "transform.h"
 #include "redefine.h"

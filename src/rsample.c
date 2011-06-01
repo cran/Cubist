@@ -13,7 +13,6 @@ int samplemain(double *outputv)
 /*  ----------  */
 {
     RRuleSet            *CubistModel;
-    double              pval;
     FILE		*F;
     CaseNo		i;
 
