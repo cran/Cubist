@@ -18,7 +18,7 @@ cubist <-  function(x, ...) UseMethod("cubist")
 ## the formats that one would use with the command line version and get back the
 ## textual representation that would be saved to the .model file also as a string.
 ## The predicton function would then pass the model text string (and the data text
-## string if instances are used) to the C code for prediciton.
+## string if instances are used) to the C code for prediction.
 ##
 ## We did this for a few reasons:
 ##

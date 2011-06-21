@@ -315,7 +315,7 @@ coef.cubist <- function(object, varNames = NULL, ...)
     comIdx <- rIdx <- 0
     for(i in seq(along = x))
       {
-        tt <- parser(x[i])
+        tt <- Cubist:::parser(x[i])
         if(names(tt)[1] == "rules")
           {
             comIdx <- comIdx + 1
@@ -334,14 +334,25 @@ coef.cubist <- function(object, varNames = NULL, ...)
             condNum[i] <- cIdx
           }
       }
-
     isEqn <- ifelse(grepl("^coeff=", x), TRUE, FALSE) 
 
     isEqn <- grepl("^coeff=", x)
-    coefs <- eqn(x[isEqn], dig = 0, text = FALSE, varNames = varNames)
-    coefs <- do.call("rbind", coefs)
-    coefs <- cbind(committee = comNum[isEqn], rule = ruleNum[isEqn], coefs)
-    as.data.frame(coefs)
+    coefs <- Cubist:::eqn(x[isEqn], dig = 0, text = FALSE, varNames = varNames)
+    p <- length(coefs)
+    dims <- unlist(lapply(coefs, length))
+    
+    coefs <- do.call("c", coefs)
+    coms <- rep(comNum[isEqn], dims)
+    rls <- rep(ruleNum[isEqn], dims)
+    out <- data.frame(tmp = paste(coms, rls, sep = "."), value = coefs, var = names(coefs))
+    out <- reshape(out, direction = "wide", v.names = "value", timevar = "var",
+                   idvar = "tmp")
+    colnames(out) <- gsub("value.", "", colnames(out), fixed = TRUE)
+    tmp <- strsplit(as.character(out$tmp), ".", fixed = TRUE)
+    out$committee <- unlist(lapply(tmp, function(x) x[1]))
+    out$rule <- unlist(lapply(tmp, function(x) x[2]))
+    out$tmp <- NULL
+    out
 
   }
 

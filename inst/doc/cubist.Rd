@@ -1,6 +1,10 @@
 \name{NEWS}
 \title{Cubist News}
 
+\section{Version 0.0.8: 2011-06-21}{
+    A bug was fixed for the \code{coef} method.
+  }
+
 \section{Version 0.0.6: 2011-04-28}{
     The GPL version was revised to be version 3 (thanks to Ross Quinlan for the note).
 
