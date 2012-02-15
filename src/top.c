@@ -1,6 +1,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
+#include <setjmp.h>
 
 #include "rulebasedmodels.h"
 #include "strbuf.h"
@@ -27,10 +28,12 @@ static void cubist(char **namesv,
     // Announce ourselves for testing
     // Rprintf("cubist called\n");
 
-    // Initialize the globals
+    // Initialize the globals to the values that the cubist
+    // program would have at the start of execution
     initglobals();
 
-    // Set globals based on the arguments
+    // Set globals based on the arguments.  This is analogous
+    // to parsing the command line in the cubist program.
     setglobals(*unbiased, *compositev, *neighbors, *committees,
                *sample, *seed, *rules, *extrapolation);
 
@@ -41,11 +44,17 @@ static void cubist(char **namesv,
     // Rprintf("Calling setOf\n");
     setOf();
 
+    // Create a strbuf using *namesv as the buffer.
+    // Note that this is a readonly strbuf since we can't
+    // extend *namesv.
     STRBUF *sb_names = strbuf_create_full(*namesv, strlen(*namesv));
+
+    // Register this strbuf using the name "undefined.names"
     rbm_register(sb_names, "undefined.names", 1);
 
+    // Create a strbuf using *datav and register it as "undefined.data"
     STRBUF *sb_datav = strbuf_create_full(*datav, strlen(*datav));
-    /* XXX why is sb_datav copied? what that part of my debugging? */
+    // XXX why is sb_datav copied? what that part of my debugging?
     rbm_register(strbuf_copy(sb_datav), "undefined.data", 1);
 
     /*

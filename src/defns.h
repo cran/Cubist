@@ -56,18 +56,20 @@
 /*************************************************************************/
 
 
-#define Goodbye(x)		{Cleanup(); exit(x);}
+#define Goodbye(x)		{Cleanup(); rbm_exit((x));}
 
 #ifdef	VerbOpt
 #include <assert.h>
 #define Verbosity(d,s)		if(VERBOSITY >= d) {s;}
 #define	Free(x)			{free(x); x=0;}
 #else
-#define	assert(x)
 #define Verbosity(d,s)
 #define	Free(x)			free(x)
 #endif
 
+#ifndef DEBUG
+#define	assert(x)
+#endif /* DEBUG */
 
 
 /*************************************************************************/
@@ -640,7 +642,6 @@ int	    TimeToSecs(String TS);
 void	    SecsToTime(int Secs, String Time);
 void	    SetTSBase(int y);
 int	    TStampToMins(String TS);
-void	    Check(float Val, float Low, float High);
 void	    Cleanup(void);
 #ifdef UTF8
 int	    UTF8CharWidth(unsigned char *U);

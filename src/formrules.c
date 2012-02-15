@@ -649,7 +649,9 @@ void RemoveBias(CRule R, int Coeffs)
 
 	Bias = TotErr / TotWt;
 
-	Verbosity(1, printf("bias %.5f  (%.2f / %.2f)\n", Bias, TotErr, TotWt))
+	/* commented out to pass R CMD check: "Compiled code should
+	   [...]  write to stdout/stderr instead of to the console" */
+	/* Verbosity(1, printf("bias %.5f  (%.2f / %.2f)\n", Bias, TotErr, TotWt)) */
 
 	if ( fabs(Bias) >= fabs(LastBias) )
 	{

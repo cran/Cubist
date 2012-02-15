@@ -71,7 +71,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title{Cubist Models For Regression}
-\author{Max Kuhn (max.kuhn@pfizer.com) \\ Steve Weston \\ Chris Keefer}
+\author{Max Kuhn (max.kuhn@pfizer.com) \\ Steve Weston \\ Chris Keefer
+\\Nathan Coulter}
 
 <<startup, echo = FALSE, results = hide>>=
 library(mlbench)
@@ -134,7 +135,7 @@ sqrt(mean((mtPred - testOutcome)^2))
 cor(mtPred, testOutcome)^2
 @ 
 
-\section{Boosting}
+\section{Ensembles By Committees}
 
 The Cubist model can also use a boosting--like scheme called {\em committees} where iterative model trees are created in sequence. The first tree follows the procedure described in the last section. Subsequent trees are created using adjusted versions to the training set outcome: if the model over--predicted a value, the response is adjusted downward for the next model (and so on). Unlike traditional boosting, stage weights for each committee are not used to average the predictions from each model tree; the final prediction is a simple average of the predictions from each model tree.
 
@@ -193,10 +194,10 @@ Figure \ref{tune} shows the profiles of the tuning parameters produced
 using \code{plot(cTune)}.
 
 
-\setkeys{Gin}{width=\textwidth}
-\begin{figure}[ht!]
+\setkeys{Gin}{width=.6\textwidth}
+\begin{figure}[t!]
   \begin{center}	
-<<tune, echo = FALSE, fig = TRUE, width = 8, height = 4.5>>=
+<<tune, echo = FALSE, fig = TRUE, width = 6, height = 4.25>>=
 trellis.par.set(caretTheme())
 print(plot(cTune, aut.key = list(columns = 4)))
 @ 
@@ -218,8 +219,8 @@ Figure \ref{lstat} shows the model fits for the test data. For these
 data, there doesn't appear to be much of a improvement when committees
 or instances are added to the based rules.
 
-\setkeys{Gin}{width=\textwidth}
-\begin{figure}[ht!]
+\setkeys{Gin}{width=.7\textwidth}
+\begin{figure}[t]
   \begin{center}	
 <<lstatPlot, echo = FALSE, fig = TRUE, width = 8, height = 4.5>>=
 lstatTest <- testPredictors[, "lstat", drop = FALSE]
@@ -227,6 +228,7 @@ newOrder <- order(lstatTest$lstat)
 lstatTest <- lstatTest[newOrder,,drop = FALSE]
 testOutcome <- testOutcome[newOrder]
 plot(lstatTest$lstat, testOutcome,
+     pch = 16, col = rgb(.2, .2, .2, .5),
      xlab = "lstat", ylab = "Median Home Value")
 points(lstatTest$lstat, predict(justRules, lstatTest),
        type = "l", lwd = 2, col = "black")
@@ -278,9 +280,8 @@ Once a model has been built with the \pkg{R} \pkg{cubist} package, the \code{exp
 
 There are a few features in the \pkg{C} code that are not yet operational in the \pkg{R} package:
 \begin{itemize}
-
-  \item variable usage/importance haven't been ported into R objects
-  \item only continuous and categorical predictors can be used (the \pkg{C} allows for other data types)
+  \item only continuous and categorical predictors can be used (the
+    original source code allows for other data types)
   \item there is an option to let the \pkg{C} code decide on using instances or not. The choice is more explicit in this package
   \item non--standard predictor names are not currently checked/fixed
   \item the \pkg{C} code supports binning of predictors

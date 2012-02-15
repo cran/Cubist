@@ -1,3 +1,5 @@
+#include <setjmp.h>
+
 #include "defns.h"
 #include "extern.h"
 #include "rulebasedmodels.h"
@@ -7,6 +9,9 @@
 /* Global variables defined in update.d */
 extern int Stage;
 extern FILE *Uf;
+
+/* Used to implement rbm_exit */
+jmp_buf rbm_buf;
 
 /* Don't want to include R.h, which has conflicts with cubist headers */
 extern void Rprintf(const char *, ...);
@@ -213,4 +218,18 @@ char *closeOf()
     } else {
         return "";
     }
+}
+
+
+/*
+ * The jmp_buf needs to be initialized before calling this.
+ * Also, this must be called further down the stack from the
+ * code that called setjmp to initialize rbm_buf.
+ * That's why we can't have a function that initialize the
+ * jmp_buf, but must use a macro instead.
+ */
+void rbm_exit(int status)
+{
+    /* This doesn't return */
+    longjmp(rbm_buf, status + JMP_OFFSET);
 }

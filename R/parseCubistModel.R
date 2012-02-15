@@ -1,5 +1,5 @@
 ## TODO:
-## 3) R function to write R prediciton function
+## 3) R function to write R prediction function
 
 
 countRules <- function(x)

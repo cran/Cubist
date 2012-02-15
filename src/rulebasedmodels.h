@@ -9,3 +9,6 @@ extern void setOf(void);
 extern char *closeOf(void);
 
 #endif
+
+#define JMP_OFFSET 100
+extern jmp_buf rbm_buf;

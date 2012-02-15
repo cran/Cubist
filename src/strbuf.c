@@ -14,6 +14,11 @@
 #define FALSE 0
 #endif
 
+/* anchor the maximum amount by which to extend buffer size by per/realloc 
+ * in vprintf
+ */
+#define MAX_EXTENDBY 2097152 /* 2 << 20 */
+
 /* Declare all local functions */
 static int extend(STRBUF *sb, unsigned int nlen);
 
@@ -134,7 +139,8 @@ int strbuf_truncate(STRBUF *sb)
     /* Set the current data size to the current position */
     sb->n = sb->i;
 
-    assert(sb->n <= sb->len);
+    /* gets flagged by R CMD check, uncomment for debugging */
+    /* assert(sb->n <= sb->len); */
 
     return 0;
 }
@@ -176,7 +182,8 @@ int strbuf_write(STRBUF *sb, const unsigned char *data, unsigned int n)
     if (sb->i > sb->n)
         sb->n = sb->i;
 
-    assert(sb->n <= sb->len);
+    /* gets flagged by R CMD check, uncomment for debugging */
+    /*assert(sb->n <= sb->len); */
 
     return 0;
 }
@@ -197,11 +204,8 @@ int strbuf_vprintf(STRBUF *sb, const unsigned char *format, va_list ap)
 {
     int s;
     int size = sb->len - sb->i;  /* Remaining space left */
+    unsigned int extendby = sb->len;
     va_list ap2;
-
-    /* Copy ap to ap2 in case we need to call vsnprintf a second time */
-    va_copy(ap2, ap);
-
     /*
      * Attempt to write to "sb".  The return value "s" is the number of
      * characters (not including the trailing '\0') which would have
@@ -209,26 +213,26 @@ int strbuf_vprintf(STRBUF *sb, const unsigned char *format, va_list ap)
      * That tells us how much we need to extend "sb" by if the first
      * attempt fails.
      */
-    if ((s = vsnprintf(sb->buf + sb->i, size, format, ap)) >= size) {
+    while (((
+        va_copy(ap2, ap),
+        /* Unlike Posix, Windows only appends null the output string is
+         * strictly smaller than the allowed size, so -1 here
+        */
+        s = vsnprintf(sb->buf + sb->i, size, format, ap2)) >= size) ||
+        s<0) {
+
         /*
-         * We didn't have enough space, but now we know how
-         * much we need, so extend the STRBUF and do it again.
-         * We'll ask for twice as much as we need, which is
-         * our simple-minded strategy for reducing the number
-         * of times that we allocate memory.
-         */
-        unsigned int nlen = sb->n + s + 1;  /* Minimum length needed */
-
-        if (extend(sb, 2 * nlen) != 0)
+         * On Windows, s*printf doesn't give useful information about the
+         * space needed, so extend the buffer by twice the previous
+         * extension, and try again
+        */
+        if (extend(sb, sb->len + extendby) != 0)
             return -1;
-
-        size = sb->len - sb->i;  /* Recompute remaining space left */
-        s = vsnprintf(sb->buf + sb->i, size, format, ap2);
-        assert(s < size);
+        if (extendby < MAX_EXTENDBY) {
+            extendby <<= 1;
+        }
+        size = sb->len - sb->i;  /* Recompute space remaining in buffer */
     }
-
-    /* This corresponds to the va_copy */
-    va_end(ap2);
 
     /*
      * Bump the STRBUF's position by s, since
@@ -238,7 +242,11 @@ int strbuf_vprintf(STRBUF *sb, const unsigned char *format, va_list ap)
     if (sb->i > sb->n)
         sb->n = sb->i;
 
-    assert(sb->n <= sb->len);
+    /* gets flagged by R CMD check, uncomment for debugging */
+    /*assert(sb->n <= sb->len); */
+
+    /* This corresponds to the va_copy */
+    va_end(ap2);
 
     return 0;
 }
@@ -268,7 +276,8 @@ int strbuf_putc(STRBUF *sb, int c)
     if (sb->i > sb->n)
         sb->n = sb->i;
 
-    assert(sb->n <= sb->len);
+    /* gets flagged by R CMD check, uncomment for debugging */
+    /*assert(sb->n <= sb->len); */
 
     return 0;
 }
@@ -317,8 +326,9 @@ unsigned char *strbuf_getall(STRBUF *sb)
 {
     /* Make sure there is enough memory to null-terminate the data */
     if (sb->n >= sb->len) {
-        /* sb->n should never actually be larger than sb->len */
-        assert(sb->n == sb->len);
+        /* sb->n should never actually be larger than sb->len */   
+      /* gets flagged by R CMD check, uncomment for debugging */
+      /*assert(sb->n == sb->len); */
         if (extend(sb, 2 * sb->n) != 0)
             return NULL;
     }
@@ -355,6 +365,5 @@ static int extend(STRBUF *sb, unsigned int nlen)
     /* Success, so update the STRBUF */
     sb->buf = buf;
     sb->len = nlen;
-
     return 0;
 }

@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <setjmp.h>
 
 #include "redefine.h"
 #include "strbuf.h"
@@ -26,14 +25,13 @@ extern void Rprintf(const char *, ...);
 
 /*
  * Not sure what value to use, but it will be automatically increased
- * if necessary, so the initial value is not critical.
+ * if necessary, so the initial value is not critical, but a larger value
+ * will help avoid a realloc with each printf. Use powers of 2
+ * to hopefully make memory allocation more smooth
  */
-#define STRBUF_LEN 100
+#define STRBUF_LEN 8192 
 
-#define HASH_LEN 100
-
-/* Used to implement rbm_exit */
-jmp_buf rbm_buf;
+#define HASH_LEN 128
 
 /*
  * This is used to save the contents of files that have been
@@ -41,6 +39,10 @@ jmp_buf rbm_buf;
  */
 static void *strbufv;
 
+/*
+ * XXX Is this called anywhere in Cubist?  It looks like it's
+ * XXX been made obsolete by rbm_removeall.
+ */
 int rbm_init()
 {
     if (strbufv == NULL) {
@@ -213,8 +215,9 @@ int rbm_remove(const char *path)
 }
 
 /*
- * This is called at the beginning a cubist run to clear out all "files"
- * generated on the previous run.
+ * This is called at the beginning of a cubist run to clear out
+ * all "files" generated on the previous run and to prepare it
+ * for the next run.
  */
 void rbm_removeall()
 {
@@ -240,17 +243,4 @@ void rbm_removeall()
 
     /* Create/recreate the hash table for subsequent use */
     strbufv = ht_new(HASH_LEN);
-}
-
-/*
- * The jmp_buf needs to be initialized before calling this.
- * Also, this must be called further down the stack from the
- * code that called setjmp to initialize rbm_buf.
- * That's why we can't have a function that initialize the
- * jmp_buf, but must use a macro instead.
- */
-void rbm_exit(int status)
-{
-    /* This doesn't return */
-    longjmp(rbm_buf, status + JMP_OFFSET);
 }

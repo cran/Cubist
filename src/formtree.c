@@ -488,7 +488,8 @@ void Divide(Tree Node, CaseNo Fp, CaseNo Lp, int Level)
     XEp[0] = Fp-1;
 #endif
 
-    assert(Node->Forks < 4);
+    /* gets flagged by R CMD check, uncomment for debugging */
+    /* assert(Node->Forks < 4); */
 
     /*  Recursive divide and conquer  */
 

@@ -1,0 +1,43 @@
+\name{NEWS}
+\title{News for Package \pkg{Cubist}}
+\newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
+
+\section{Changes in version 0.0.11}{
+\itemize{ 
+
+\item cubist uses a string buffer to capture the output files that
+  would normally get saved to external files. The package was failing
+  R CMD check only on windows because the output files were getting
+  garbled. \code{s*printf} functions work differently on Windows. On
+  Linux, they return the size that is needed to correctly print the
+  string.  On Windows, if there isn't enough space, they return -1.
+
+\item Also, work-arounds were added to the C sources because of R CMD
+check issues. \code{printf()}, \code{assert()} and \code{exist()}
+statements were removed or redefined.
+ } 
+}
+
+\section{Changes in version 0.0.8}{
+\itemize{ 
+\item A bug was fixed for the \code{coef} method.
+ } 
+}
+
+
+\section{Changes in version 0.0.6}{
+\itemize{ 
+\item The GPL version was revised to be version 3 (thanks to Ross
+Quinlan for the note).
+\item The variable usage statistics were saved to a data frame in
+called \code{object$usage}. The package vignette and help files were
+updated accordingly.
+\item When using \code{cubist}, if \code{x} was a vector or a single
+variable, an error occurred. This was fixed.
+\item The vignette was also expanded to show how \cpkg{caret} can be
+used to tune the model and a technical error was corrected about the
+boosting algorithm (thanks again to Ross Quinlan).
+ } 
+}
+
+

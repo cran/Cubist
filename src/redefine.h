@@ -6,9 +6,6 @@
 
 #include "strbuf.h"
 
-#define JMP_OFFSET 100
-extern jmp_buf rbm_buf;
-
 extern int rbm_init();
 extern int rbm_register(STRBUF *sb, const char *filename, int force);
 extern int rbm_deregister(const char *filename);

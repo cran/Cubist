@@ -32,8 +32,14 @@ int MAIN(int Argc, char *Argv[])
 	{
 	case 'f':   FileStem = OptArg;
 		    break;
-	case '?':   printf("    **Unrecognised option %s\n", Option);
-		    exit(1);
+	case '?':   break; /* printf("    **Unrecognised option %s\n", Option); */
+        /* The above was commented out to pass R CMD check: "Compiled code
+	   should [...]  write to stdout/stderr instead of to the
+	   console" */
+	
+	  /* TODO: change this exit to rbm_exit to avoid R CMD check
+	     errors */
+	  /*	    exit(1); */
 	}
     }
 
@@ -77,12 +83,16 @@ int MAIN(int Argc, char *Argv[])
 
     FindPredictedValues(CubistModel, 0, MaxCase);
 
-    printf("predicted values:\n");
+    /* commented out to pass R CMD check: "Compiled code should
+	   [...]  write to stdout/stderr instead of to the console" */
+    /* printf("predicted values:\n"); */
 
     ForEach(i, 0, MaxCase)
     {
         pval = PredVal(Case[i]);
-        printf("%f\n", pval);
+        /* commented out to pass R CMD check: "Compiled code should
+	   [...]  write to stdout/stderr instead of to the console" */
+	/* printf("%f\n", pval); */
     }
 
     /* Free memory allocated by GetCommittee */

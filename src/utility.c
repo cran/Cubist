@@ -836,23 +836,6 @@ void CValToStr(ContValue CV, Attribute Att, String DS)
     }
 }
 
-
-
-void Check(float Val, float Low, float High)
-/*   -----  */
-{
-    if ( Val < Low || Val > High )
-    {
-	fprintf(Of, TX_IllegalValue(Val, Low, High));
-	exit(1);
-    }
-}
-
-
-
-
-
-
 /*************************************************************************/
 /*									 */
 /*	Deallocate all dynamic storage					 */
