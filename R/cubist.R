@@ -71,7 +71,7 @@ cubist.default <- function(x, y,
       splits$percentile <- NA
       for(i in 1:nrow(splits))
         {
-          splits$percentile[i] <- sum(x[,as.character(splits$variable[i])] <= splits$value[i])/nrow(x)
+          if(!is.na(splits$value[i])) splits$percentile[i] <- sum(x[,as.character(splits$variable[i])] <= splits$value[i])/nrow(x)
         }
     }
 

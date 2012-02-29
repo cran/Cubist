@@ -2,6 +2,21 @@
 \title{News for Package \pkg{Cubist}}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in version 0.0.12}{
+\itemize{ 
+
+\item A bug was fixed that occurred when splits were determined in
+models with a categorical variable involving more than two categories
+(eg. "if X4 in {a, b}")
+
+\item Also, a bug was found in the variable importances calculations
+ when a variable was used only in the conditions and not the model.
+
+\item The 'doc' directory was moved into the "vignettes" directory  
+
+ }  
+}
+
 \section{Changes in version 0.0.11}{
 \itemize{ 
 

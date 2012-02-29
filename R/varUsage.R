@@ -11,25 +11,49 @@ varUsage <- function(x)
     hasPct <- grep("%", x)
     if(length(hasPct) < 1) stop("cannot find attribute usage data")
     x <- x[hasPct]
-    x <- gsub(" ", "", x)
-    x <- strsplit(x, "%")
-    getCond <- function(x)
-      {
-        if(length(x) == 2) return(0) else return(as.numeric(x[1]))
-      }
 
-    getModel <- function(x)
-      {
-        if(length(x) == 2) return(as.numeric(x[1])) else return(as.numeric(x[2]))
-      }
-    getVar <- function(x) x[length(x)]
+    x <- as.list(x)
 
-    conds <- unlist(lapply(x, getCond))
-    mods <- unlist(lapply(x, getModel))
-    var <- unlist(lapply(x, getVar))
-    
-    data.frame(Conditions = conds,
-               Model = mods,
-               Variable = var)
+    getValues <- function(x)
+      {
+
+        x2 <- strsplit(x, " ")[[1]]
+        hasPct <- grepl("%", x2)
+        if(sum(hasPct) == 2)
+          {
+            x2 <- x2[grepl("%", x2)]
+            x2 <- as.numeric(gsub("%", "", x2))
+            return(x2)[1]
+          } else {
+            if(sum(hasPct) == 1)
+              {
+                pctInd <-  grep("%", x2)
+                ## more "" in behind than in front indicate condition
+                ## only
+                if(sum(x2[1:pctInd] == "") < sum(x2[-(1:pctInd)] == ""))
+                  {
+                    x2 <- x2[grepl("%", x2)]
+                    x2 <- as.numeric(gsub("%", "", x2))
+                    return(c(x2, 0))
+
+                  } else {
+                    x2 <- x2[grepl("%", x2)]
+                    x2 <- as.numeric(gsub("%", "", x2))
+                    return(c(0, x2))
+                  }
+              } else return(0)
+          }
+      }
+    getVar <- function(x)
+      {
+        x <- strsplit(x, " ")[[1]]
+        x[length(x)]
+      }
+    values <- lapply(x, getValues)
+    values <- do.call("rbind", values)
+    values <- as.data.frame(values)
+    colnames(values) <- c("Conditions", "Model")
+    values$Variable <- unlist(lapply(x, getVar))
+    values
     
   }

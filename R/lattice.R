@@ -21,7 +21,9 @@ dotplot.cubist <- function(x, data = NULL, what = "splits", committee = NULL, ru
     
     if(what == "splits")
       {
+        if(all(splits$type == "type3")) stop("No splits of continuous predictors were made")
         out <- dotplot(label ~ percentile|variable, data = splits,
+                       subset = type == "type2",
                        groups = dir,
                        panel = function(x, y, groups, subscripts)
                        {

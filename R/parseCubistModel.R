@@ -45,18 +45,22 @@ getSplits <- function(x)
     for(i in seq(along = x))
       {
         tt <- parser(x[i])
+        ## Start of a new rule
         if(names(tt)[1] == "rules")
           {
             comIdx <- comIdx + 1
             rIdx <- 0
           }
         comNum[i] <-comIdx
+        ## Start of a new condition
         if(names(tt)[1] == "conds")
           {
             rIdx <- rIdx + 1
             cIdx <- 0
           }
         ruleNum[i] <-rIdx
+        ## Within a rule, type designates the type of conditional statement
+        ## type = 2 appears to be a simple split of a continuous predictor
         if(names(tt)[1] == "type")
           {
             cIdx <- cIdx + 1
@@ -70,10 +74,21 @@ getSplits <- function(x)
     if (! is.null(rulesPerCom) && numCom > 0)
       names(rulesPerCom) <- paste("Com", 1:numCom)
 
+    ## In object x, what element starts a new rule
     isNewRule <- ifelse(grepl("^conds=", x), TRUE, FALSE)   
     splitVar <- rep("", length(x))
     splitVal <- rep(NA, length(x))
+    splitCats <- rep("", length(x))
     splitDir <- rep("", length(x))
+
+    ## This is a simple continuous split, such as
+    ##
+    ##   nox > 0.668
+    ##
+    ## or
+    ##
+    ## type="2" att="nox" cut="0.66799998" result=">"
+    ##    
     isType2 <- grepl("^type=\"2\"", x)
     if(any(isType2))
       {
@@ -82,22 +97,39 @@ getSplits <- function(x)
         splitDir[isType2] <- type2(x[isType2])$rslt
         splitVal[isType2] <- type2(x[isType2])$val
       }
+    ## This is a split of categorical data such as 
+    ##
+    ##   X4 in {c, d}
+    ##
+    ## or
+    ##
+    ## type="3" att="X4" elts="c","d"
+    ##
+
     isType3 <- grepl("^type=\"3\"", x)
     if(any(isType3))
       {
         splitVar[isType3] <- type3(x[isType3])$var
-        splitVal[isType3] <- type3(x[isType3])$val
+        splitCats[isType3] <- type3(x[isType3])$val
+        splitCats[isType3] <- gsub("[{}]", "", splitCats[isType3])
+        splitCats[isType3] <- gsub("\"", "", splitCats[isType3])
+        splitCats[isType3] <- gsub(" ", "", splitCats[isType3])
       }
     if(!any(isType2) & !any(isType3)) return(NULL)
     splitData <- data.frame(committee = comNum,
                             rule = ruleNum,
                             variable = splitVar,
                             dir = splitDir,
-                            value = as.numeric(splitVal))
-    splitData <- splitData[!is.na(splitData$value),]
+                            value = as.numeric(splitVal),
+                            category = splitCats)
+    splitData$type <- ""
+    if(any(isType2)) splitData$type[isType2] <- "type2"
+    if(any(isType3)) splitData$type[isType3] <- "type3"    
+    splitData <- splitData[splitData$variable != "" ,]
     splitData
   }
 
+## This function is no longer used
 printCubistRules <- function(x, dig = max(3, getOption("digits") - 5))
   {
     
