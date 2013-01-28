@@ -2,6 +2,19 @@
 \title{News for Package \pkg{Cubist}}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+
+\section{Changes in version 0.0.13}{
+\itemize{ 
+
+\item More efficient code was borrowed from the C50 package to write
+the data file to a string.
+
+\item A bug related to column names found by David Clifford was fixed. 
+
+ }  
+}
+
+
 \section{Changes in version 0.0.12}{
 \itemize{ 
 

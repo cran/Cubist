@@ -1,5 +1,10 @@
+
+## To avoid "dotplot.cubist: no visible binding for global variable 'type'":
+type <- NULL
+
 dotplot.cubist <- function(x, data = NULL, what = "splits", committee = NULL, rule = NULL, ...)
   {
+
     library(reshape2)
     splits <- x$splits
     if(is.null(splits)) stop("No splits were used in this model")
