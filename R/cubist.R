@@ -84,10 +84,10 @@ cubist.default <- function(x, y,
 
 
   usage <- varUsage(Z$output)
-  if(nrow(usage) < ncol(x))
+  if(is.null(usage) || nrow(usage) < ncol(x))
     {
       xNames <- colnames(x)
-      uNames <- as.character(usage$Variable)
+      uNames <- if(!is.null(usage)) as.character(usage$Variable) else ""
       if(!all(xNames %in% uNames))
         {
 
@@ -223,17 +223,3 @@ truncateText <- function(x)
     paste(out, collapse = "\n")
   }
 
-
-if(FALSE)
-  {
-    library(caret)
-    library(Cubist)
-    data(BloodBrain)
-    test1 <- cubist(bbbDescr, logBBB, control = cubistControl(committees = 10, sample = 50))
-    test2 <- cubist(bbbDescr, logBBB, control = cubistControl(committees = 1, sample = 50, neighbors = 2, composite = "yes"))
-    test3 <- cubist(bbbDescr, logBBB, control = cubistControl(committees = 1, sample = 10, neighbors = 2, composite = "yes"))
-    test4 <- cubist(bbbDescr, logBBB, control = cubistControl(committees = 10))
-    test5 <- cubist(bbbDescr, logBBB, control = cubistControl(committees = 50))
-    test6 <- cubist(bbbDescr, logBBB)
-
-  }

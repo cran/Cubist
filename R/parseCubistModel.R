@@ -347,7 +347,7 @@ coef.cubist <- function(object, varNames = NULL, ...)
     comIdx <- rIdx <- 0
     for(i in seq(along = x))
       {
-        tt <- Cubist:::parser(x[i])
+        tt <- parser(x[i])
         if(names(tt)[1] == "rules")
           {
             comIdx <- comIdx + 1
@@ -369,7 +369,7 @@ coef.cubist <- function(object, varNames = NULL, ...)
     isEqn <- ifelse(grepl("^coeff=", x), TRUE, FALSE) 
 
     isEqn <- grepl("^coeff=", x)
-    coefs <- Cubist:::eqn(x[isEqn], dig = 0, text = FALSE, varNames = varNames)
+    coefs <- eqn(x[isEqn], dig = 0, text = FALSE, varNames = varNames)
     p <- length(coefs)
     dims <- unlist(lapply(coefs, length))
     

@@ -9,7 +9,7 @@ varUsage <- function(x)
     ## making some assumptions here
     x <- gsub("^\t", "", x)
     hasPct <- grep("%", x)
-    if(length(hasPct) < 1) stop("cannot find attribute usage data")
+    if(length(hasPct) < 1) return(NULL)
     x <- x[hasPct]
 
     x <- as.list(x)

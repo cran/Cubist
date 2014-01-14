@@ -1,6 +1,6 @@
 useDynLib(Cubist)
 
-import(lattice)
+import(lattice, reshape2)
 
 export(cubistControl,
        cubist,

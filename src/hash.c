@@ -137,9 +137,7 @@ int ht_set(void *ht, const char *key, void *value, enum valuetype type)
     if (entry == NULL) {
         /* Compute the index of the linked list to add this entry to */
         int i = ht_hashcode(key) % table->size;
-        
-        /* gets flagged by R CMD check, uncomment for debugging */
-        /* assert(i >= 0 && i < table->size); */
+        assert(i >= 0 && i < table->size);
 
         /* Allocate memory for this new entry */
         entry = malloc(sizeof(ht_entry));
@@ -178,9 +176,7 @@ int ht_delete(void *ht, const char *key)
     }
 
     i = ht_hashcode(key) % table->size;
-    
-    /* gets flagged by R CMD check, uncomment for debugging */
-    /* assert(i >= 0 && i < table->size); */
+    assert(i >= 0 && i < table->size);
 
     /* Search for the key such that we can delete the entry */
     for (p = &(table->entries[i]); *p != NULL; p = &((*p)->next)) {
@@ -213,8 +209,7 @@ void *ht_lookup(void *ht, const char *key)
     }
 
     i = ht_hashcode(key) % table->size;
-    /* gets flagged by R CMD check, uncomment for debugging */
-    /* assert(i >= 0 && i < table->size); */
+    assert(i >= 0 && i < table->size);
 
     /* Search the appropriate linked list for the key */
     for (entry = table->entries[i]; entry != NULL; entry = entry->next) {
