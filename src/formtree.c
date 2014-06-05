@@ -35,6 +35,8 @@
 #include "defns.h"
 #include "extern.h"
 
+#include <stdint.h>
+
 #include "transform.h"
 #include "redefine.h"
 
@@ -637,7 +639,7 @@ void AddDefAtts(void)
 	    for ( e = 0 ; ; e++ )
 	    {
 		if ( DefOp(D[e]) == OP_ATT &&
-		     ! GEnv.DoNotUse[(long) DefSVal(D[e])] )
+		     ! GEnv.DoNotUse[(long) (intptr_t) DefSVal(D[e])] )
 		{
 		    Verbosity(2,
 			fprintf(Of, "adding %s from %s\n",

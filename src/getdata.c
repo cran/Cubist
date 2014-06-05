@@ -35,6 +35,8 @@
 #include "defns.h"
 #include "extern.h"
 
+#include <stdint.h>
+
 #include "transform.h"
 #include "redefine.h"
 
@@ -467,7 +469,7 @@ DataRec GetDataRec(FILE *Df, Boolean Train)
 			{
 			    /*  Add value to list  */
 
-			    if ( MaxAttVal[Att] >= (long) AttValName[Att][0] )
+			    if ( MaxAttVal[Att] >= (long) (intptr_t) AttValName[Att][0] )
 			    {
 				XError(TOOMANYVALS, AttName[Att],
 					 (char *) AttValName[Att][0] - 1);

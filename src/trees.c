@@ -132,8 +132,10 @@ void Show(Tree T, int Sh)
 	    if ( ++SubTree >= SubSpace )
 	    {
 		SubSpace += 100;
-		SubDef = ( SubDef ? Realloc(SubDef, SubSpace, Tree) :
-				    Alloc(SubSpace, Tree) );
+                if (SubDef)
+		    Realloc(SubDef, SubSpace, Tree);
+                else
+		    SubDef = Alloc(SubSpace, Tree);
 	    }
 
 	    SubDef[SubTree] = T;

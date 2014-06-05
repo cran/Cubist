@@ -2,6 +2,14 @@
 \title{News for Package \pkg{Cubist}}
 \newcommand{\cpkg}{\href{http://CRAN.R-project.org/package=#1}{\pkg{#1}}}
 
+\section{Changes in version 0.0.17}{
+\itemize{ 
+
+\item Memory allocation bugs in the R version of the C code, which lead to segmentation faults, were fixed.
+
+ }  
+}
+
 \section{Changes in version 0.0.15}{
 \itemize{ 
 

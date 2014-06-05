@@ -9,6 +9,7 @@
 
 extern void cubistmain();
 extern void samplemain(double *outputv);
+extern void FreeCases(void);
 
 static void cubist(char **namesv,
                    char **datav,
@@ -39,6 +40,11 @@ static void cubist(char **namesv,
 
     // Handles the strbufv data structure
     rbm_removeall();
+
+    // Deallocates memory allocated by NewCase.
+    // Not necessary since it's also called at the end of this function,
+    // but it doesn't hurt, and I'm feeling paranoid.
+    FreeCases();
 
     // XXX Should this be controlled via an option?
     // Rprintf("Calling setOf\n");
@@ -84,6 +90,9 @@ static void cubist(char **namesv,
     char *output = R_alloc(strlen(outputString) + 1, 1);
     strcpy(output, outputString);
     *outputv = output;
+
+    // Deallocates memory allocated by NewCase
+    FreeCases();
 
     // We reinitialize the globals on exit out of general paranoia
     initglobals();

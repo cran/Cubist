@@ -34,6 +34,8 @@
 #include "defns.h"
 #include "extern.h"
 
+#include <stdint.h>
+
 #include "transform.h"
 #include "redefine.h"
 
@@ -374,7 +376,7 @@ void Error(int ErrNo, String S1, String S2)
 	    break;
 
 	case TOOMANYVALS:
-	    sprintf(Msg, E_TOOMANYVALS(S1, (int) (long) S2));
+	    sprintf(Msg, E_TOOMANYVALS(S1, (int) (intptr_t) S2));
 	    Quit = true;
 	    break;
 
