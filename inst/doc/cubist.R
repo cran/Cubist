@@ -83,8 +83,8 @@ library(caret)
 set.seed(1)
 cTune <- train(x = trainingPredictors, y = trainingOutcome,
                "cubist",
-               tuneGrid = expand.grid(.committees = c(1, 10, 50, 100), 
-                                      .neighbors = c(0, 1, 5, 9)),
+               tuneGrid = expand.grid(committees = c(1, 10, 50, 100), 
+                                      neighbors = c(0, 1, 5, 9)),
                trControl = trainControl(method = "cv"))
 cTune
 
@@ -100,8 +100,8 @@ print(plot(cTune, aut.key = list(columns = 4)))
 ### code chunk number 10: lstat
 ###################################################
 lstat <- trainingPredictors[, "lstat", drop = FALSE]
-justRules <- cubist(lstat, trainingOutcome)
-andCommittees <- cubist(lstat, trainingOutcome, committees = 100)
+justRules <- cubist(x = lstat, y = trainingOutcome)
+andCommittees <- cubist(x = lstat, y = trainingOutcome, committees = 100)
 
 
 ###################################################
