@@ -32,45 +32,74 @@
 ## Following this entry, all attributes are defined in the order that
 ## their values will be given for each case.
 
+#' @export
+#' @keywords external
+#' @rdname QuinlanAttributes
+#' @param x A data frame or matrix or predictors
+#' @param y A vector of outcomes
+#' @param w A numeric vector of case weights or `NULL`
+#' @param label A string required by the C code as the file name
+#' @param comments A logical; should info about the call be
+#'  printed in the string?
 makeNamesFile <-
-function(x, y, label = "outcome", comments = TRUE)
-  {
-    if(comments)
-      {
-        call <- match.call()
-        out <- paste("| Generated using ", R.version.string, "\n",
-                     "| on ", format(Sys.time(), "%a %b %d %H:%M:%S %Y"), "\n",
-                     "| function call: ", paste(deparse(call)),
-                     sep = "")
-      } else out <- ""
-
-    if(is.numeric(y))
-      {
-        outcomeInfo <- ": continuous."
-      } else {
-        lvls <- levels(y)
-        prefix <- if(is.ordered(y)) "[ordered] " else ""
-        outcomeInfo <- paste(": ",
-                             prefix,
-                             paste(lvls, collapse = ","),
-                             ".", sep = "")
-      }
-
+  function(x,
+           y,
+           w = NULL,
+           label = "outcome",
+           comments = TRUE) {
+    
+    # See issue #5
+    has_sample <- grep("^sample", colnames(x))
+    if(length(has_sample)) 
+      colnames(x) <- gsub("^sample", "__Sample", colnames(x))
+    
+    if (comments) {
+      call <- match.call()
+      out <- paste0(
+        "| Generated using ",
+        R.version.string,
+        "\n",
+        "| on ",
+        format(Sys.time(), "%a %b %d %H:%M:%S %Y")
+      )
+    } else
+      out <- ""
+    
+    if (is.numeric(y)) {
+      outcomeInfo <- ": continuous."
+    } else {
+      lvls <- escapes(levels(y))
+      prefix <- if (is.ordered(y))
+        "[ordered] "
+      else
+        ""
+      outcomeInfo <- paste(": ",
+                           prefix,
+                           paste(lvls, collapse = ","),
+                           ".", sep = "")
+    }
+    
     out <- paste(out,
                  "\n", label, ".\n",
                  "\n", label, outcomeInfo,
                  sep = "")
     varData <- QuinlanAttributes(x)
-    varData <- paste(escapes(names(varData)), ": ", varData, sep = "", collapse = "\n")
+    if (!is.null(w)) 
+      varData <- c(varData, "case weight" = "continuous.")
+    varData <-
+      paste(escapes(names(varData)),
+            ": ",
+            varData,
+            sep = "",
+            collapse = "\n")
     out <- paste(out, "\n", varData, "\n", sep = "")
     out
-
-
   }
 
-escapes <- function(x, chars = c(":", ";", "|"))
-  {
-    for(i in chars) x <- gsub(i, paste("\\", i, sep = ""), x, fixed = TRUE)
-    x
-  }
+escapes <- function(x, chars = c(":", ";", "|")) {
+  for (i in chars)
+    x <- gsub(i, paste("\\", i, sep = ""), x, fixed = TRUE)
+  gsub("([^[:alnum:]^[:space:]])", "\\\\\\1", x, useBytes = TRUE)  
+  x
+}
 

@@ -1,143 +1,96 @@
-### R code from vignette source 'cubist.Rnw'
-
-###################################################
-### code chunk number 1: startup
-###################################################
-library(mlbench)
-data(BostonHousing)
+## ----setup, include = FALSE----------------------------------------------
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
 library(Cubist)
+theme_set(theme_bw())
+options(digits = 3)
 
-
-###################################################
-### code chunk number 2: bh1
-###################################################
+## ----bh1-----------------------------------------------------------------
 library(Cubist)
 library(mlbench)
+
 data(BostonHousing)
 BostonHousing$chas <- as.numeric(BostonHousing$chas) - 1
 
 set.seed(1)
-
 inTrain <- sample(1:nrow(BostonHousing), floor(.8*nrow(BostonHousing)))
 
-trainingPredictors <- BostonHousing[ inTrain, -14]
-testPredictors     <- BostonHousing[-inTrain, -14]
+train_pred <- BostonHousing[ inTrain, -14]
+test_pred  <- BostonHousing[-inTrain, -14]
 
-trainingOutcome <- BostonHousing$medv[ inTrain]
-testOutcome     <- BostonHousing$medv[-inTrain]
+train_resp <- BostonHousing$medv[ inTrain]
+test_resp  <- BostonHousing$medv[-inTrain]
 
-modelTree <- cubist(x = trainingPredictors, y = trainingOutcome)
-modelTree
+model_tree <- cubist(x = train_pred, y = train_resp)
+model_tree
 
+## ----bh2-----------------------------------------------------------------
+summary(model_tree)
 
-###################################################
-### code chunk number 3: bh2
-###################################################
-summary(modelTree)
-
-
-###################################################
-### code chunk number 4: bh3
-###################################################
-mtPred <- predict(modelTree, testPredictors)
+## ----bh3-----------------------------------------------------------------
+model_tree_pred <- predict(model_tree, test_pred)
 ## Test set RMSE
-sqrt(mean((mtPred - testOutcome)^2))
+sqrt(mean((model_tree_pred - test_resp)^2))
 ## Test set R^2
-cor(mtPred, testOutcome)^2
+cor(model_tree_pred, test_resp)^2
 
-
-###################################################
-### code chunk number 5: bh4
-###################################################
+## ----bh4-----------------------------------------------------------------
 set.seed(1)
-committeeModel <- cubist(x = trainingPredictors, y = trainingOutcome,
-                         committees = 5)
-summary(committeeModel)
+com_model <- cubist(x = train_pred, y = train_resp, committees = 5)
+summary(com_model)
 
-
-###################################################
-### code chunk number 6: bh5
-###################################################
-cmPred <- predict(committeeModel, testPredictors)
+## ----bh5-----------------------------------------------------------------
+com_pred <- predict(com_model, test_pred)
 ## RMSE
-sqrt(mean((cmPred - testOutcome)^2))
+sqrt(mean((com_pred - test_resp)^2))
 ## R^2
-cor(cmPred, testOutcome)^2
+cor(com_pred, test_resp)^2
 
-
-###################################################
-### code chunk number 7: bh6
-###################################################
-instancePred <- predict(committeeModel, testPredictors, neighbors = 5)
+## ----bh6-----------------------------------------------------------------
+inst_pred <- predict(com_model, test_pred, neighbors = 5)
 ## RMSE
-sqrt(mean((instancePred - testOutcome)^2))
+sqrt(mean((inst_pred - test_resp)^2))
 ## R^2
-cor(instancePred, testOutcome)^2
+cor(inst_pred, test_resp)^2
 
-
-###################################################
-### code chunk number 8: tune
-###################################################
+## ----tune----------------------------------------------------------------
 library(caret)
 
+grid <- expand.grid(committees = c(1, 10, 50, 100),
+                    neighbors = c(0, 1, 5, 9))
 set.seed(1)
-cTune <- train(x = trainingPredictors, y = trainingOutcome,
-               "cubist",
-               tuneGrid = expand.grid(committees = c(1, 10, 50, 100), 
-                                      neighbors = c(0, 1, 5, 9)),
-               trControl = trainControl(method = "cv"))
-cTune
+boston_tuned <- train(
+  x = train_pred,
+  y = train_resp,
+  method = "cubist",
+  tuneGrid = grid,
+  trControl = trainControl(method = "cv")
+  )
+boston_tuned
 
+## ----plot-tune, echo = FALSE, fig = TRUE, width = 6, height = 4.25-------
+ggplot(boston_tuned) + 
+  theme(legend.position = "top")
 
-###################################################
-### code chunk number 9: tune
-###################################################
-trellis.par.set(caretTheme())
-print(plot(cTune, aut.key = list(columns = 4)))
+## ----lstat---------------------------------------------------------------
+lstat_df <- train_pred[, "lstat", drop = FALSE]
+rules_only <- cubist(x = lstat_df, y = train_resp)
+rules_and_com <- cubist(x = lstat_df, y = train_resp, committees = 100)
 
+predictions <- lstat_df
+predictions$medv <- train_resp
+predictions$rules_neigh <- predict(rules_only, lstat_df, neighbors = 5)
+predictions$committees <- predict(rules_and_com, lstat_df)
 
-###################################################
-### code chunk number 10: lstat
-###################################################
-lstat <- trainingPredictors[, "lstat", drop = FALSE]
-justRules <- cubist(x = lstat, y = trainingOutcome)
-andCommittees <- cubist(x = lstat, y = trainingOutcome, committees = 100)
+## ----lstatPlot, echo = FALSE, fig = TRUE, width = 8, height = 4.5--------
+ggplot(predictions, aes(x = lstat, y = medv)) + 
+  geom_point(alpha = .5) + 
+  geom_line(aes(y = rules_neigh), col = "red", alpha = .5, lwd = 1) + 
+  geom_line(aes(y = committees), col = "blue", alpha = .5, lwd = 1)  
 
-
-###################################################
-### code chunk number 11: lstatPlot
-###################################################
-lstatTest <- testPredictors[, "lstat", drop = FALSE]
-newOrder <- order(lstatTest$lstat)
-lstatTest <- lstatTest[newOrder,,drop = FALSE]
-testOutcome <- testOutcome[newOrder]
-plot(lstatTest$lstat, testOutcome,
-     pch = 16, col = rgb(.2, .2, .2, .5),
-     xlab = "lstat", ylab = "Median Home Value")
-points(lstatTest$lstat, predict(justRules, lstatTest),
-       type = "l", lwd = 2, col = "black")
-points(lstatTest$lstat, predict(justRules, lstatTest, neighbors = 5),
-       type = "l", lwd = 2, col = "blue")
-points(lstatTest$lstat, predict(andCommittees, lstatTest),
-       type = "l", lwd = 2, col = "darkred")
-legend(20, 50,
-       c("Rules", "100 Committees", "Rules + 5 Neighbors"),
-       col = c("black", "darkred", "blue"),
-       lwd = rep(2, 3))
-
-
-###################################################
-### code chunk number 12: vimp
-###################################################
-summary(modelTree)
-modelTree$usage
+## ----vimp----------------------------------------------------------------
+summary(model_tree)
+model_tree$usage
 library(caret)
-varImp(modelTree)
-
-
-###################################################
-### code chunk number 13: <session
-###################################################
-toLatex(sessionInfo())
-
+varImp(model_tree)
 
