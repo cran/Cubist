@@ -1,14 +1,15 @@
 Package: Cubist
 Type: Package
 Title: Rule- And Instance-Based Regression Modeling
-Version: 0.2.0
-Date: 2017-11-27
+Version: 0.2.1
+Date: 2017-12-01
 Authors@R: c(
     person("Max", "Kuhn", , "mxkuhn@gmail.com", c("aut", "cre")),
     person("Weston", "Steve", role = "ctb"),
     person("Keefer", "Chris", role = "ctb"),
     person("Coulter", "Nathan", role = "ctb"),
-    person("Quinlan", "Ross", role = "aut", comment = "Author of imported C code"))
+    person("Ross", "Quinlan", role = "aut", comment = "Author of imported C code"),
+    person("Rulequest Research Pty Ltd.", role = "cph", comment = "Copyright holder of imported C code"))
 Maintainer: Max Kuhn <mxkuhn@gmail.com>
 Description: Regression modeling using rules with added instance-based corrections.
 Depends: lattice
@@ -21,11 +22,12 @@ LazyLoad: yes
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2017-11-27 19:38:28 UTC; max
+Packaged: 2017-12-01 18:28:48 UTC; max
 Author: Max Kuhn [aut, cre],
   Weston Steve [ctb],
   Keefer Chris [ctb],
   Coulter Nathan [ctb],
-  Quinlan Ross [aut] (Author of imported C code)
+  Ross Quinlan [aut] (Author of imported C code),
+  Rulequest Research Pty Ltd. [cph] (Copyright holder of imported C code)
 Repository: CRAN
-Date/Publication: 2017-11-28 00:15:59 UTC
+Date/Publication: 2017-12-01 23:18:21 UTC
