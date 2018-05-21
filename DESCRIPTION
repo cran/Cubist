@@ -1,13 +1,12 @@
 Package: Cubist
 Type: Package
 Title: Rule- And Instance-Based Regression Modeling
-Version: 0.2.1
-Date: 2017-12-01
+Version: 0.2.2
 Authors@R: c(
     person("Max", "Kuhn", , "mxkuhn@gmail.com", c("aut", "cre")),
-    person("Weston", "Steve", role = "ctb"),
-    person("Keefer", "Chris", role = "ctb"),
-    person("Coulter", "Nathan", role = "ctb"),
+    person("Steve", "Weston", role = "ctb"),
+    person("Chris", "Keefer", role = "ctb"),
+    person("Nathan", "Coulter", role = "ctb"),
     person("Ross", "Quinlan", role = "aut", comment = "Author of imported C code"),
     person("Rulequest Research Pty Ltd.", role = "cph", comment = "Copyright holder of imported C code"))
 Maintainer: Max Kuhn <mxkuhn@gmail.com>
@@ -22,12 +21,12 @@ LazyLoad: yes
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2017-12-01 18:28:48 UTC; max
+Packaged: 2018-05-21 16:51:57 UTC; max
 Author: Max Kuhn [aut, cre],
-  Weston Steve [ctb],
-  Keefer Chris [ctb],
-  Coulter Nathan [ctb],
+  Steve Weston [ctb],
+  Chris Keefer [ctb],
+  Nathan Coulter [ctb],
   Ross Quinlan [aut] (Author of imported C code),
   Rulequest Research Pty Ltd. [cph] (Copyright holder of imported C code)
 Repository: CRAN
-Date/Publication: 2017-12-01 23:18:21 UTC
+Date/Publication: 2018-05-21 17:58:02 UTC
