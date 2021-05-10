@@ -1,28 +1,34 @@
 ## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
-library(caret)
 library(Cubist)
 library(dplyr)
 library(rlang)
 library(tidyrules)
-theme_set(theme_bw())
 options(digits = 3)
 
 ## ----bh1----------------------------------------------------------------------
 library(Cubist)
-library(mlbench)
 
-data(BostonHousing)
-BostonHousing$chas <- as.numeric(BostonHousing$chas) - 1
+data(ames, package = "modeldata")
+# model the data on the log10 scale
+ames$Sale_Price <- log10(ames$Sale_Price)
 
-set.seed(1)
-inTrain <- sample(1:nrow(BostonHousing), floor(.8*nrow(BostonHousing)))
+set.seed(11)
+in_train_set <- sample(1:nrow(ames), floor(.8*nrow(ames)))
 
-train_pred <- BostonHousing[ inTrain, -14]
-test_pred  <- BostonHousing[-inTrain, -14]
+predictors <- 
+  c("Lot_Area", "Alley", "Lot_Shape", "Neighborhood", "Bldg_Type", 
+    "Year_Built", "Total_Bsmt_SF", "Central_Air", "Gr_Liv_Area", 
+    "Bsmt_Full_Bath", "Bsmt_Half_Bath", "Full_Bath", "Half_Bath", 
+    "TotRms_AbvGrd",  "Year_Sold", "Longitude", "Latitude")
 
-train_resp <- BostonHousing$medv[ inTrain]
-test_resp  <- BostonHousing$medv[-inTrain]
+ames$Sale_Price <- log10(ames$Sale_Price)
+
+train_pred <- ames[ in_train_set, predictors]
+test_pred  <- ames[-in_train_set, predictors]
+
+train_resp <- ames$Sale_Price[ in_train_set]
+test_resp  <- ames$Sale_Price[-in_train_set]
 
 model_tree <- cubist(x = train_pred, y = train_resp)
 model_tree
@@ -39,7 +45,7 @@ cor(model_tree_pred, test_resp)^2
 
 ## ----bh4----------------------------------------------------------------------
 set.seed(1)
-com_model <- cubist(x = train_pred, y = train_resp, committees = 5)
+com_model <- cubist(x = train_pred, y = train_resp, committees = 3)
 summary(com_model)
 
 ## ----bh5----------------------------------------------------------------------
@@ -56,65 +62,16 @@ sqrt(mean((inst_pred - test_resp)^2))
 ## R^2
 cor(inst_pred, test_resp)^2
 
-## ----tune---------------------------------------------------------------------
-library(caret)
-
-grid <- expand.grid(committees = c(1, 10, 50, 100),
-                    neighbors = c(0, 1, 5, 9))
-set.seed(1)
-boston_tuned <- train(
-  x = train_pred,
-  y = train_resp,
-  method = "cubist",
-  tuneGrid = grid,
-  trControl = trainControl(method = "cv")
-  )
-boston_tuned
-
-## ----plot-tune, echo = FALSE, fig = TRUE, width = 6, height = 4.25------------
-ggplot(boston_tuned) + 
-  theme(legend.position = "top")
-
-## ----lstat--------------------------------------------------------------------
-lstat_df <- train_pred[, "lstat", drop = FALSE]
-rules_only <- cubist(x = lstat_df, y = train_resp)
-rules_and_com <- cubist(x = lstat_df, y = train_resp, committees = 100)
-
-predictions <- lstat_df
-predictions$medv <- train_resp
-predictions$rules_neigh <- predict(rules_only, lstat_df, neighbors = 5)
-predictions$committees <- predict(rules_and_com, lstat_df)
-
-## ----lstatPlot, echo = FALSE, fig = TRUE, width = 8, height = 4.5-------------
-ggplot(predictions, aes(x = lstat, y = medv)) + 
-  geom_point(alpha = .5) + 
-  geom_line(aes(y = rules_neigh), col = "red", alpha = .5, lwd = 1) + 
-  geom_line(aes(y = committees), col = "blue", alpha = .5, lwd = 1)  
-
-## ----vimp---------------------------------------------------------------------
-summary(model_tree)
-model_tree$usage
-library(caret)
-varImp(model_tree)
+## ----echo = FALSE, fig.align='center'-----------------------------------------
+knitr::include_graphics("neighbors.gif")
 
 ## ----summary-tree-------------------------------------------------------------
 summary(model_tree)
 
 ## ----tidy_rules_example-------------------------------------------------------
-library(dplyr)
-library(modeldata)
-data("attrition")
-attrition <- as_tibble(attrition)
-
-# lets predict monthly income
-attrition_x <- attrition %>% dplyr::select(-MonthlyIncome, -Attrition)
-attrition_y <- attrition %>% dplyr::select(MonthlyIncome) %>% unlist()
-
-model_tree_attrition <- cubist(x = attrition_x, y = attrition_y)
-
 library(tidyrules)
 
-tr <- tidyRules(model_tree_attrition)
+tr <- tidyRules(model_tree)
 tr
 tr[, c("LHS", "RHS")]
 
@@ -140,9 +97,15 @@ rule_expr  <- char_to_expr(tr, 7, model = FALSE)
 model_expr <- char_to_expr(tr, 7, model = TRUE)
 
 # filter the data corresponding to rule 7
-attrition %>% 
-  dplyr::filter(eval_tidy(rule_expr, attrition)) %>%
-  # evaluate the estimated MonthlyIncome
-  dplyr::mutate(MonthlyIncome_est = eval_tidy(model_expr, .)) %>%
-  dplyr::select(MonthlyIncome, MonthlyIncome_est)
+ames %>% 
+  dplyr::filter(eval_tidy(rule_expr, ames)) %>%
+  dplyr::mutate(sale_price_pred = eval_tidy(model_expr, .)) %>%
+  dplyr::select(Sale_Price, sale_price_pred)
+
+## ----vimp, eval = FALSE-------------------------------------------------------
+#  caret::varImp(model_tree)
+#  
+#  # or
+#  
+#  vip::vi(model_tree)
 
