@@ -1,4 +1,4 @@
-34c04fb2b3d13d6becc76bddb522ff0e *DESCRIPTION
+36dad40c8902e7082bcc7fd840e38fd8 *DESCRIPTION
 78218a6fc5c76508ac0d5afa90e324e7 *NAMESPACE
 458bf9a28f8e0d7b11ae29a6df2da65e *R/QuinlanAttributes.R
 a76645d3ff44982d295ac146e6e2c782 *R/cubist.R
@@ -16,10 +16,10 @@ fb4253a57a7e3fcd287ecfdb5de9b280 *cleanup
 5de51eaf960af3a754b5a7e77ff73c4d *configure
 c47f50470b3840719da1689c6fd2f0a3 *configure.ac
 c24f011d71bc411fdb2586aeb2794af0 *configure.win
-81adf49f5cb8d5fc297b51f798075ace *inst/NEWS.Rd
+09ac5c6a420db4609691edf5f627578e *inst/NEWS.Rd
 dedca6adf8d26cebed63f39ed8f8ff82 *inst/doc/cubist.R
 5cc9fff0b5c489c00fcd2929f59f31d3 *inst/doc/cubist.Rmd
-f1fb88d0cd5e01d49d46bd6bf6beb51e *inst/doc/cubist.html
+555933dc0a46394dea9206388af1dbf1 *inst/doc/cubist.html
 77c39e157dc44f16069cce8e66b301da *man/QuinlanAttributes.Rd
 ea226a0bbd7ca858d72a0c0270817aa4 *man/cubist.default.Rd
 fccd0a82b398fa51281ce57929e41762 *man/cubistControl.Rd
