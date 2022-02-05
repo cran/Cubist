@@ -199,7 +199,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## cubist.default(x = train_pred, y = train_resp)
 ## 
 ## 
-## Cubist [Release 2.07 GPL Edition]  Fri May 28 10:24:42 2021
+## Cubist [Release 2.07 GPL Edition]  Sat Feb  5 08:18:18 2022
 ## ---------------------------------
 ## 
 ##     Target attribute `outcome&#39;
@@ -377,7 +377,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## cubist.default(x = train_pred, y = train_resp, committees = 3)
 ## 
 ## 
-## Cubist [Release 2.07 GPL Edition]  Fri May 28 10:24:42 2021
+## Cubist [Release 2.07 GPL Edition]  Sat Feb  5 08:18:18 2022
 ## ---------------------------------
 ## 
 ##     Target attribute `outcome&#39;
@@ -830,7 +830,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## cubist.default(x = train_pred, y = train_resp)
 ## 
 ## 
-## Cubist [Release 2.07 GPL Edition]  Fri May 28 10:24:42 2021
+## Cubist [Release 2.07 GPL Edition]  Sat Feb  5 08:18:18 2022
 ## ---------------------------------
 ## 
 ##     Target attribute `outcome&#39;
@@ -991,35 +991,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> <span class="fu">tidyRules</span>(model_tree)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>tr</span></code></pre></div>
-<pre><code>## # A tibble: 11 x 9
-##       id LHS           RHS           support  mean   min   max   error committee
-##    &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;
-##  1     1 Year_Built &lt;… (2.8339713) …     107 0.692 0.614 0.725 0.00869         1
-##  2     2 Neighborhood… (0.4666239) …     333 0.707 0.672 0.754 0.00541         1
-##  3     3 Neighborhood… (0.01018) + …     176 0.711 0.680 0.727 0.00307         1
-##  4     4 Neighborhood… (0.6804143) …      87 0.711 0.684 0.729 0.00495         1
-##  5     5 Neighborhood… (0.2370069) …      35 0.712 0.695 0.729 0.00477         1
-##  6     6 Neighborhood… (0.3519752) …    1428 0.713 0.614 0.754 0.00430         1
-##  7     7 Bldg_Type %i… (0.3791743) …      54 0.713 0.681 0.736 0.00445         1
-##  8     8 Year_Built &gt;… (0.3008866) …     997 0.717 0.679 0.748 0.00344         1
-##  9     9 Neighborhood… (0.451118) +…     166 0.735 0.711 0.769 0.00446         1
-## 10    10 Year_Built &gt;… (0.1972512) …     128 0.741 0.723 0.761 0.00356         1
-## 11    11 Year_Built &gt;… (0.7741479) …      20 0.747 0.716 0.762 0.00686         1</code></pre>
+<pre><code>## # A tibble: 11 × 9
+##       id LHS                   RHS   support  mean   min   max   error committee
+##    &lt;int&gt; &lt;chr&gt;                 &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;
+##  1     1 Year_Built &lt;= 1952 &amp;… (2.8…     107 0.692 0.614 0.725 0.00869         1
+##  2     2 Neighborhood %in% c(… (0.4…     333 0.707 0.672 0.754 0.00541         1
+##  3     3 Neighborhood %in% c(… (0.0…     176 0.711 0.680 0.727 0.00307         1
+##  4     4 Neighborhood %in% c(… (0.6…      87 0.711 0.684 0.729 0.00495         1
+##  5     5 Neighborhood %in% c(… (0.2…      35 0.712 0.695 0.729 0.00477         1
+##  6     6 Neighborhood %in% c(… (0.3…    1428 0.713 0.614 0.754 0.00430         1
+##  7     7 Bldg_Type %in% c(&#39;Du… (0.3…      54 0.713 0.681 0.736 0.00445         1
+##  8     8 Year_Built &gt; 1952 &amp; … (0.3…     997 0.717 0.679 0.748 0.00344         1
+##  9     9 Neighborhood %in% c(… (0.4…     166 0.735 0.711 0.769 0.00446         1
+## 10    10 Year_Built &gt; 2004 &amp; … (0.1…     128 0.741 0.723 0.761 0.00356         1
+## 11    11 Year_Built &gt; 2004 &amp; … (0.7…      20 0.747 0.716 0.762 0.00686         1</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tr[, <span class="fu">c</span>(<span class="st">&quot;LHS&quot;</span>, <span class="st">&quot;RHS&quot;</span>)]</span></code></pre></div>
-<pre><code>## # A tibble: 11 x 2
-##    LHS                                    RHS                                   
-##    &lt;chr&gt;                                  &lt;chr&gt;                                 
-##  1 Year_Built &lt;= 1952 &amp; Central_Air == &#39;… (2.8339713) + (2.89e-05 * Gr_Liv_Area…
-##  2 Neighborhood %in% c(&#39;Old_Town&#39;, &#39;Edwa… (0.4666239) + (1.87e-05 * Gr_Liv_Area…
-##  3 Neighborhood %in% c(&#39;College_Creek&#39;, … (0.01018) + (0.00034 * Year_Built) + …
-##  4 Neighborhood %in% c(&#39;North_Ames&#39;, &#39;Cr… (0.6804143) + (1.45e-05 * Gr_Liv_Area…
-##  5 Neighborhood %in% c(&#39;North_Ames&#39;, &#39;Ol… (0.2370069) + (0.000232 * Year_Built)…
-##  6 Neighborhood %in% c(&#39;North_Ames&#39;, &#39;Co… (0.3519752) + (1.26e-05 * Gr_Liv_Area…
-##  7 Bldg_Type %in% c(&#39;Duplex&#39;, &#39;Twnhs&#39;) &amp;… (0.3791743) + (1.48e-05 * Gr_Liv_Area…
-##  8 Year_Built &gt; 1952 &amp; Total_Bsmt_SF &gt; 7… (0.3008866) + (1.41e-05 * Gr_Liv_Area…
-##  9 Neighborhood %in% c(&#39;Somerset&#39;, &#39;Nort… (0.451118) + (1.11e-05 * Gr_Liv_Area)…
-## 10 Year_Built &gt; 2004 &amp; Total_Bsmt_SF &lt;= … (0.1972512) + (0.000248 * Year_Built)…
-## 11 Year_Built &gt; 2004 &amp; Total_Bsmt_SF &gt; 2… (0.7741479) - (1e-05 * Gr_Liv_Area)</code></pre>
+<pre><code>## # A tibble: 11 × 2
+##    LHS                                                                     RHS  
+##    &lt;chr&gt;                                                                   &lt;chr&gt;
+##  1 Year_Built &lt;= 1952 &amp; Central_Air == &#39;N&#39; &amp; Gr_Liv_Area &lt;= 1692           (2.8…
+##  2 Neighborhood %in% c(&#39;Old_Town&#39;, &#39;Edwards&#39;, &#39;Gilbert&#39;, &#39;Sawyer&#39;, &#39;Sawye… (0.4…
+##  3 Neighborhood %in% c(&#39;College_Creek&#39;, &#39;Edwards&#39;, &#39;Somerset&#39;, &#39;Northridg… (0.0…
+##  4 Neighborhood %in% c(&#39;North_Ames&#39;, &#39;Crawford&#39;) &amp; Year_Built &lt;= 1952 &amp; G… (0.6…
+##  5 Neighborhood %in% c(&#39;North_Ames&#39;, &#39;Old_Town&#39;, &#39;Sawyer&#39;, &#39;Northwest_Ame… (0.2…
+##  6 Neighborhood %in% c(&#39;North_Ames&#39;, &#39;College_Creek&#39;, &#39;Old_Town&#39;, &#39;Edward… (0.3…
+##  7 Bldg_Type %in% c(&#39;Duplex&#39;, &#39;Twnhs&#39;) &amp; Gr_Liv_Area &gt; 1692                (0.3…
+##  8 Year_Built &gt; 1952 &amp; Total_Bsmt_SF &gt; 765 &amp; Gr_Liv_Area &lt;= 1692           (0.3…
+##  9 Neighborhood %in% c(&#39;Somerset&#39;, &#39;Northridge_Heights&#39;, &#39;Brookside&#39;, &#39;Cr… (0.4…
+## 10 Year_Built &gt; 2004 &amp; Total_Bsmt_SF &lt;= 2024 &amp; Gr_Liv_Area &gt; 1692          (0.1…
+## 11 Year_Built &gt; 2004 &amp; Total_Bsmt_SF &gt; 2024                                (0.7…</code></pre>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lets look at 7th rule</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tr<span class="sc">$</span>LHS[<span class="dv">7</span>]</span></code></pre></div>
 <pre><code>## [1] &quot;Bldg_Type %in% c(&#39;Duplex&#39;, &#39;Twnhs&#39;) &amp; Gr_Liv_Area &gt; 1692&quot;</code></pre>
@@ -1047,7 +1047,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">eval_tidy</span>(rule_expr, ames)) <span class="sc">%&gt;%</span></span>
 <span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sale_price_pred =</span> <span class="fu">eval_tidy</span>(model_expr, .)) <span class="sc">%&gt;%</span></span>
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Sale_Price, sale_price_pred)</span></code></pre></div>
-<pre><code>## # A tibble: 59 x 2
+<pre><code>## # A tibble: 59 × 2
 ##    Sale_Price sale_price_pred
 ##         &lt;dbl&gt;           &lt;dbl&gt;
 ##  1      0.703           0.707
