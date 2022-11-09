@@ -1,3 +1,7 @@
+# C50 0.4.1
+
+* Build configuration changes for Windows
+
 # C50 0.4.0
 
 * Build configuration changes for Windows
