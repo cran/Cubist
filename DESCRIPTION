@@ -1,7 +1,7 @@
 Type: Package
 Package: Cubist
 Title: Rule- And Instance-Based Regression Modeling
-Version: 0.4.2
+Version: 0.4.2.1
 Authors@R: c(
     person("Max", "Kuhn", , "mxkuhn@gmail.com", role = c("aut", "cre")),
     person("Steve", "Weston", role = "ctb"),
@@ -31,7 +31,7 @@ Encoding: UTF-8
 LazyLoad: yes
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2023-02-08 17:25:00 UTC; max
+Packaged: 2023-03-09 07:00:08 UTC; ripley
 Author: Max Kuhn [aut, cre],
   Steve Weston [ctb],
   Chris Keefer [ctb],
@@ -39,4 +39,4 @@ Author: Max Kuhn [aut, cre],
   Ross Quinlan [aut] (Author of imported C code),
   Rulequest Research Pty Ltd. [cph] (Copyright holder of imported C code)
 Repository: CRAN
-Date/Publication: 2023-02-08 21:20:02 UTC
+Date/Publication: 2023-03-09 07:57:45 UTC

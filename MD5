@@ -1,4 +1,4 @@
-d3b9b18ea09c326c96ad7c7ac63dad1d *DESCRIPTION
+023a0e8b03ecf845d365439ee5553b2e *DESCRIPTION
 78218a6fc5c76508ac0d5afa90e324e7 *NAMESPACE
 35fda05b4cef4424d4b534cf5418157e *NEWS.md
 458bf9a28f8e0d7b11ae29a6df2da65e *R/QuinlanAttributes.R
@@ -46,7 +46,7 @@ da26ebbb34a1342637d6b66cba3cc7be *src/regress.c
 610e8e6454cc3da4444db486a0500da6 *src/rsample.c
 38258a51e602e01c3785978d20b2834a *src/rulebasedmodels.c
 69a98a6f6bb1c93aa765ee8fbed1a4f2 *src/rulebasedmodels.h
-f1da4cfc46db91c2e9995e209d2e46ea *src/rules.c
+26882de9093a7c7f544430c5e5eef37a *src/rules.c
 0351786eafa5d6e36ae2812126febd66 *src/sample.c
 3749b36e4eeb71dc3b812bfec704adaa *src/sort.c
 b2a7b59da02da24be82045fe0b5c97e9 *src/stats.c
