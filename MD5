@@ -1,6 +1,6 @@
-023a0e8b03ecf845d365439ee5553b2e *DESCRIPTION
+a0136122760b8ef0d2f5858472e7256c *DESCRIPTION
 78218a6fc5c76508ac0d5afa90e324e7 *NAMESPACE
-35fda05b4cef4424d4b534cf5418157e *NEWS.md
+1110c52c4e5df9897480e7d01150bf74 *NEWS.md
 458bf9a28f8e0d7b11ae29a6df2da65e *R/QuinlanAttributes.R
 a76645d3ff44982d295ac146e6e2c782 *R/cubist.R
 f2665e9a339f01f192acb03f34897ae6 *R/exportCubistFiles.R
@@ -11,10 +11,10 @@ c5f9f4301a451ce15f6552ed6916f5b5 *R/makeNamesFile.R
 74064b2618646a60a86d501e10614fe4 *R/parseCubistModel.R
 681ecd7d59c6fc28f19993d9724c1992 *R/predict.cubist.R
 72a8f811cb31bbd2d80ce53edf4f383b *R/varUsage.R
-4e6cdd29bd00d39be5de5576d862b3e8 *build/vignette.rds
-dedca6adf8d26cebed63f39ed8f8ff82 *inst/doc/cubist.R
-5cc9fff0b5c489c00fcd2929f59f31d3 *inst/doc/cubist.Rmd
-75fb749a44b1c6dc926d9fb34c1b58ca *inst/doc/cubist.html
+0a6aa772e5fab02fa6e1ebaf073c0a99 *build/vignette.rds
+b1a7468e4e50a118d330cd403b65e2b4 *inst/doc/cubist.R
+3c4fffdbef0d36df3ef29b83d184d8af *inst/doc/cubist.Rmd
+2f71974683496d80ff6a0a7555759f6d *inst/doc/cubist.html
 77c39e157dc44f16069cce8e66b301da *man/QuinlanAttributes.Rd
 ea226a0bbd7ca858d72a0c0270817aa4 *man/cubist.default.Rd
 fccd0a82b398fa51281ce57929e41762 *man/cubistControl.Rd
@@ -46,7 +46,7 @@ da26ebbb34a1342637d6b66cba3cc7be *src/regress.c
 610e8e6454cc3da4444db486a0500da6 *src/rsample.c
 38258a51e602e01c3785978d20b2834a *src/rulebasedmodels.c
 69a98a6f6bb1c93aa765ee8fbed1a4f2 *src/rulebasedmodels.h
-26882de9093a7c7f544430c5e5eef37a *src/rules.c
+a203dee855179c55b6482ffb2e229e9c *src/rules.c
 0351786eafa5d6e36ae2812126febd66 *src/sample.c
 3749b36e4eeb71dc3b812bfec704adaa *src/sort.c
 b2a7b59da02da24be82045fe0b5c97e9 *src/stats.c
@@ -57,11 +57,11 @@ b351cb0ff4a3170dc0df8a4e944e9a0d *src/top.c
 d3141d8a040de09bce1aa72da5815c17 *src/transform.h
 7c884d7667cf58c350bdd5061ac599e4 *src/trees.c
 e61d7280123a28c10809ea0179e632b8 *src/update.c
-144f1c2815ffdb3375c0496576dac410 *src/utility.c
+57d55afbee22ce09e4fd302dafedd649 *src/utility.c
 f1eef61d34c9fb016946a7b43af9380c *src/xval.c
 298f5e6031863051592f76a4c42ee442 *tests/testthat.R
 f2c6e84077365db051d5fecf4489cc17 *tests/testthat/_snaps/basic-execution.md
 5cee02d7c907b51ce83f21839011c442 *tests/testthat/test-basic-execution.R
-5cc9fff0b5c489c00fcd2929f59f31d3 *vignettes/cubist.Rmd
+3c4fffdbef0d36df3ef29b83d184d8af *vignettes/cubist.Rmd
 88fc3abf75d8b612954ac8b7f308036d *vignettes/extras/tuning.Rmd
 983f285544ea6d5604715f91d544c909 *vignettes/neighbors.gif

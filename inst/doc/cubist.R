@@ -3,7 +3,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(Cubist)
 library(dplyr)
 library(rlang)
-library(tidyrules)
+library(rules)
 options(digits = 3)
 
 ## ----bh1----------------------------------------------------------------------
@@ -21,8 +21,6 @@ predictors <-
     "Year_Built", "Total_Bsmt_SF", "Central_Air", "Gr_Liv_Area", 
     "Bsmt_Full_Bath", "Bsmt_Half_Bath", "Full_Bath", "Half_Bath", 
     "TotRms_AbvGrd",  "Year_Sold", "Longitude", "Latitude")
-
-ames$Sale_Price <- log10(ames$Sale_Price)
 
 train_pred <- ames[ in_train_set, predictors]
 test_pred  <- ames[-in_train_set, predictors]
@@ -68,39 +66,31 @@ knitr::include_graphics("neighbors.gif")
 ## ----summary-tree-------------------------------------------------------------
 summary(model_tree)
 
-## ----tidy_rules_example-------------------------------------------------------
-library(tidyrules)
+## -----------------------------------------------------------------------------
+library(rules)
 
-tr <- tidyRules(model_tree)
-tr
-tr[, c("LHS", "RHS")]
+rule_df <- tidy(model_tree)
 
-# lets look at 7th rule
-tr$LHS[7]
-tr$RHS[7]
+rule_df
 
-## ----rule-7-------------------------------------------------------------------
+rule_df$estimate[[1]]
+
+rule_df$statistic[[1]]
+
+## -----------------------------------------------------------------------------
+# Text
+rule_7 <- rule_df$rule[7]
+
+# Convert to an expression
+rule_7 <- rlang::parse_expr(rule_7)
+rule_7
+
+# Use in a dplyr filter: 
+nrow(train_pred)
+
 library(dplyr)
-library(rlang)
 
-char_to_expr <- function(x, index = 1, model = TRUE) {
-  x <- x %>% dplyr::slice(index) 
-  if (model) {
-    x <- x %>% dplyr::pull(RHS) %>% rlang::parse_expr()
-  } else {
-    x <- x %>% dplyr::pull(LHS) %>% rlang::parse_expr()
-  }
-  x
-}
-
-rule_expr  <- char_to_expr(tr, 7, model = FALSE)
-model_expr <- char_to_expr(tr, 7, model = TRUE)
-
-# filter the data corresponding to rule 7
-ames %>% 
-  dplyr::filter(eval_tidy(rule_expr, ames)) %>%
-  dplyr::mutate(sale_price_pred = eval_tidy(model_expr, .)) %>%
-  dplyr::select(Sale_Price, sale_price_pred)
+train_pred %>% filter(!!rule_7) %>% nrow()
 
 ## ----vimp, eval = FALSE-------------------------------------------------------
 #  caret::varImp(model_tree)
