@@ -93,9 +93,9 @@ library(dplyr)
 train_pred %>% filter(!!rule_7) %>% nrow()
 
 ## ----vimp, eval = FALSE-------------------------------------------------------
-#  caret::varImp(model_tree)
-#  
-#  # or
-#  
-#  vip::vi(model_tree)
+# caret::varImp(model_tree)
+# 
+# # or
+# 
+# vip::vi(model_tree)
 

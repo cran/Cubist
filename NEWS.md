@@ -1,3 +1,7 @@
+# Cubist 0.5.0
+
+* Updated C code to stop overwriting keyword symbols. 
+
 # Cubist 0.4.4
 
 * Fixed two issues in the vignette. 
