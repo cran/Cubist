@@ -1,6 +1,6 @@
-265f1c865eaeba08fde867882471b24d *DESCRIPTION
+5860ffcf89d4bedea92966056c5b5eaf *DESCRIPTION
 78218a6fc5c76508ac0d5afa90e324e7 *NAMESPACE
-d1343ab3742d18f94a9b2d4fea6da3d6 *NEWS.md
+cfa752ec6d99f06c24d1055db48f1527 *NEWS.md
 458bf9a28f8e0d7b11ae29a6df2da65e *R/QuinlanAttributes.R
 a76645d3ff44982d295ac146e6e2c782 *R/cubist.R
 f2665e9a339f01f192acb03f34897ae6 *R/exportCubistFiles.R
@@ -8,13 +8,13 @@ f452f879827e660ac67282d315c35f17 *R/formatAttributes.R
 dfb55a592640c59bad3798df67749d24 *R/lattice.R
 6cadbe2f19d6a941849fac28cf13678a *R/makeDataFile.R
 c5f9f4301a451ce15f6552ed6916f5b5 *R/makeNamesFile.R
-74064b2618646a60a86d501e10614fe4 *R/parseCubistModel.R
+990382e1ffcc40f32438fa8cf89c0aab *R/parseCubistModel.R
 681ecd7d59c6fc28f19993d9724c1992 *R/predict.cubist.R
 72a8f811cb31bbd2d80ce53edf4f383b *R/varUsage.R
-3d85b00868d7394eb2cad12b97c35470 *build/vignette.rds
+de1d66ddbfd32efc2a9610d04b5fc4f7 *build/vignette.rds
 251294304d4b78cab394eea3763b3a21 *inst/doc/cubist.R
 3c4fffdbef0d36df3ef29b83d184d8af *inst/doc/cubist.Rmd
-f1d5924bf95cd3bdf29cad07aa0cdf5b *inst/doc/cubist.html
+5b1c24b462b0cc6fab2b5dfdcf264f56 *inst/doc/cubist.html
 77c39e157dc44f16069cce8e66b301da *man/QuinlanAttributes.Rd
 ea226a0bbd7ca858d72a0c0270817aa4 *man/cubist.default.Rd
 fccd0a82b398fa51281ce57929e41762 *man/cubistControl.Rd
