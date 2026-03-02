@@ -1,7 +1,7 @@
 Type: Package
 Package: Cubist
 Title: Rule- And Instance-Based Regression Modeling
-Version: 0.5.1
+Version: 0.6.0
 Authors@R: c(
     person("Max", "Kuhn", , "mxkuhn@gmail.com", role = c("aut", "cre")),
     person("Steve", "Weston", role = "ctb"),
@@ -21,16 +21,16 @@ BugReports: https://github.com/topepo/Cubist/issues
 Depends: lattice
 Imports: reshape2, utils
 Suggests: covr, dplyr (>= 0.7.4), knitr, mlbench, modeldata, rlang,
-        rmarkdown, rules, testthat (>= 3.0.0)
+        rmarkdown, rules, testthat (>= 3.0.0), withr
 VignetteBuilder: knitr
 Biarch: true
 Config/Needs/website: pkgdown, caret, tidymodels, rules
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyLoad: yes
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 NeedsCompilation: yes
-Packaged: 2025-10-24 20:27:01 UTC; max
+Packaged: 2026-03-02 18:13:16 UTC; max
 Author: Max Kuhn [aut, cre],
   Steve Weston [ctb],
   Chris Keefer [ctb],
@@ -38,4 +38,4 @@ Author: Max Kuhn [aut, cre],
   Ross Quinlan [aut] (Author of imported C code),
   Rulequest Research Pty Ltd. [cph] (Copyright holder of imported C code)
 Repository: CRAN
-Date/Publication: 2025-10-25 05:10:18 UTC
+Date/Publication: 2026-03-02 21:00:02 UTC
